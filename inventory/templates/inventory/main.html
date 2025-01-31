@@ -1,0 +1,125 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
+  <title>Management Panal</title>
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet" />
+  <script src="https://use.fontawesome.com/releases/v6.2.0/js/all.js"></script>
+  <link rel="stylesheet" href="{% static 'vendor/fonts/boxicons.css' %}" />
+
+  <!-- Core CSS -->
+  <link rel="stylesheet" href="{% static 'vendor/css/core.css' %}" class="template-customizer-core-css" />
+  <link rel="stylesheet" href="{% static 'vendor/css/theme-default.css' %}" class="template-customizer-theme-css" />
+  <link rel="stylesheet" href="{% static 'css/demo.css' %}" />
+
+  <!-- Vendors CSS -->
+  <link rel="stylesheet" href="{% static 'vendor/libs/perfect-scrollbar/perfect-scrollbar.css' %}" />
+  <link rel="stylesheet" href="{% static 'vendor/libs/apex-charts/apex-charts.css' %}" />
+
+  <!-- Page CSS -->
+  <link rel="stylesheet" type="text/css" href="{% static 'css/custom.css' %}">
+
+  <!-- Helpers -->
+  <script src="{% static 'vendor/js/helpers.js' %}"></script>
+
+  <!--! Template customizer & Theme config files MUST be included after core stylesheets and helpers.js in the <head> section -->
+  <!--? Config:  Mandatory theme config file contain global vars & default theme options, Set your preferred theme option in this file.  -->
+  <script src="{% static 'js/config.js' %}"></script>
+  <script src="{% static 'vendor/libs/jquery/jquery.js' %}"></script>
+  <script src="{% static 'vendor/libs/popper/popper.js' %}"></script>
+  <script src="{% static 'vendor/js/bootstrap.js' %}"></script>
+  <script src="{% static 'vendor/libs/perfect-scrollbar/perfect-scrollbar.js' %}"></script>
+  <script src="{% static 'vendor/js/menu.js' %}"></script>
+  <!-- endbuild -->
+  
+  <!-- Vendors JS -->
+  <script src="{% static 'vendor/libs/apex-charts/apexcharts.js' %}"></script>
+
+  <!-- Main JS -->
+  <script src="{% static 'js/main.js' %}"></script>
+
+  <!-- HTMX -->
+  <script src="https://unpkg.com/htmx.org@1.9.5" integrity="sha384-xcuj3WpfgjlKF+FXhSQFQ0ZNr39ln+hwjN3npfM9VBnUskLolQAcN80McRIVOPuO" crossorigin="anonymous"></script>
+
+</head>
+<body>
+
+  <!-- Layout wrapper -->
+  <div class="layout-wrapper layout-content-navbar">
+    <div class="layout-container">
+      <!-- Menu -->
+      <aside id="layout-menu" class="layout-menu menu-vertical menu bg-menu-theme">
+        <div class="app-brand">
+          <a href="index.html" class="app-brand-link">
+            <span class="app-brand-logo demo">
+              <img decoding="async" src="{% static 'img/logo.png' %}" alt="Logo Placeholder" width="120px" class="logo">
+            </span>
+          </a>
+          <a href="javascript:void(0);" class="layout-menu-toggle menu-link text-large ms-auto d-block d-xl-none">
+            <i class="bx bx-chevron-left bx-sm align-middle"></i>
+          </a>
+        </div>
+        <p style="font-size: 0.8rem; text-align:center;">Henny <br/>Furniture</p>
+        <div class="menu-inner-shadow"></div>
+        <ul class="menu-inner py-1">
+          <!-- Dashboard -->
+
+          <li class="menu-item">
+            <a hx-get="{% url 'wereda' %}" hx-target="#content-div" hx-push-url="true"  class="menu-link">
+              <i class="menu-icon tf-icons bx bx-home-circle"></i>
+              <div data-i18n="Analytics">Materials</div>
+            </a>
+          </li>
+      
+          <li class="menu-item">
+            <a hx-get="{% url 'resident' %}" hx-target="#content-div" hx-push-url="true"  class="menu-link">
+              <i class="menu-icon tf-icons bx bx-home-circle"></i>
+              <div data-i18n="Analytics">Sales</div>
+            </a>
+          </li>
+
+          <li class="menu-item">
+            <a hx-get="{% url 'commodity' %}" hx-target="#content-div" hx-push-url="true"  class="menu-link">
+              <i class="menu-icon tf-icons bx bx-home-circle"></i>
+              <div data-i18n="Analytics">Work Orders</div>
+            </a>
+          </li>
+
+          <li class="menu-item">
+            <a hx-get="{% url 'ration' %}" hx-target="#content-div" hx-push-url="true"  class="menu-link">
+              <i class="menu-icon tf-icons bx bx-home-circle"></i>
+              <div data-i18n="Analytics">Users</div>
+            </a>
+          </li>
+        </ul>
+      </aside>
+      <!-- / Menu -->
+      
+      <!-- Content wrapper -->
+      <div class="content-wrapper">
+        <!-- Content -->
+        <div class="text-center bg-menu-theme" id="content-nav" hx-history-elt>
+          <h4>Inventory Management</h4>
+        </div>
+
+        <div class="container-xxl flex-grow-1 container-p-y" id="content-div" hx-history-elt>
+                {% block content %} {% endblock content %}
+        </div>
+        <!-- / Content -->
+
+        <div class="content-backdrop fade"></div>
+      </div>
+    <!-- Content wrapper -->
+    </div>
+    <!-- / Layout page -->
+  </div>
+  <!-- Overlay -->
+  <div class="layout-overlay layout-menu-toggle"></div>
+</body>
+</html>
