@@ -42,8 +42,7 @@ class Material(models.Model):
     material_code = models.CharField(max_length=50, unique=True)
     description = models.TextField(blank=True, null=True)
     stock_quantity = models.PositiveIntegerField(default=0)
-    unit_name = models.CharField(max_length=50)
-    unit_symbol = models.CharField(max_length=10)
+    unit_price = models.DecimalField()
 
 class Employee(models.Model):
     name = models.CharField(max_length=100)
