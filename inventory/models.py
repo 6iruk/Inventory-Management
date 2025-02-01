@@ -1,5 +1,6 @@
 from django.db import models
 from django.core.validators import MinValueValidator, RegexValidator
+from django.contrib.auth.models import User
 
 # Create your models here
 
@@ -29,12 +30,13 @@ REQUEST_STATUS = [
 
 phone_regex = RegexValidator(regex=r'^\+?1?\d{9,15}$', message="Phone number must be entered in the format: '+999999999'. Up to 15 digits allowed.")
 
-class User(AbstractUser):
+class SysUser(User):
     phone_number = models.CharField(validators=[phone_regex], max_length=17, blank=True, null=True, unique=True)
     role = models.CharField(max_length=20, choices=USER_ROLES)
     
-    USERNAME_FIELD = 'username'
-    REQUIRED_FIELDS = ['phone_number']
+    def save(self, *args, **kwargs):
+        self.username = self.phone
+        super(SysUser, self).save(*args, **kwargs)
 
 class Material(models.Model):
     name = models.CharField(max_length=100)
@@ -42,7 +44,7 @@ class Material(models.Model):
     material_code = models.CharField(max_length=50, unique=True)
     description = models.TextField(blank=True, null=True)
     stock_quantity = models.PositiveIntegerField(default=0)
-    unit_price = models.DecimalField()
+    unit_price = models.DecimalField(decimal_places=2, max_digits=10)
 
 class Employee(models.Model):
     name = models.CharField(max_length=100)
