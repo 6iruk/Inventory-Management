@@ -55,44 +55,34 @@
     <div class="layout-container">
       <!-- Menu -->
       <aside id="layout-menu" class="layout-menu menu-vertical menu bg-menu-theme">
-        <div class="app-brand">
-          <a href="index.html" class="app-brand-link">
-            <span class="app-brand-logo demo">
-              <img decoding="async" src="{% static 'img/logo.png' %}" alt="Logo Placeholder" width="120px" class="logo">
-            </span>
-          </a>
-          <a href="javascript:void(0);" class="layout-menu-toggle menu-link text-large ms-auto d-block d-xl-none">
-            <i class="bx bx-chevron-left bx-sm align-middle"></i>
-          </a>
-        </div>
-        <p style="font-size: 0.8rem; text-align:center;">Mulugeta Alemu<br/>Building Materials</p>
+        <h3 style="padding-top: 0.8rem; text-align:center;">Mulugeta Alemu<br/>Building Materials</h3>
         <div class="menu-inner-shadow"></div>
         <ul class="menu-inner py-1">
           <!-- Dashboard -->
 
           <li class="menu-item">
-            <a hx-get="{% url 'wereda' %}" hx-target="#content-div" hx-push-url="true"  class="menu-link">
+            <a hx-get="{% url 'home' %}" hx-target="#content-div" hx-push-url="true"  class="menu-link">
               <i class="menu-icon tf-icons bx bx-home-circle"></i>
               <div data-i18n="Analytics">Materials</div>
             </a>
           </li>
       
           <li class="menu-item">
-            <a hx-get="{% url 'resident' %}" hx-target="#content-div" hx-push-url="true"  class="menu-link">
+            <a hx-get="{% url 'home' %}" hx-target="#content-div" hx-push-url="true"  class="menu-link">
               <i class="menu-icon tf-icons bx bx-home-circle"></i>
               <div data-i18n="Analytics">Sales</div>
             </a>
           </li>
 
           <li class="menu-item">
-            <a hx-get="{% url 'commodity' %}" hx-target="#content-div" hx-push-url="true"  class="menu-link">
+            <a hx-get="{% url 'home' %}" hx-target="#content-div" hx-push-url="true"  class="menu-link">
               <i class="menu-icon tf-icons bx bx-home-circle"></i>
               <div data-i18n="Analytics">Work Orders</div>
             </a>
           </li>
 
           <li class="menu-item">
-            <a hx-get="{% url 'ration' %}" hx-target="#content-div" hx-push-url="true"  class="menu-link">
+            <a hx-get="{% url 'home' %}" hx-target="#content-div" hx-push-url="true"  class="menu-link">
               <i class="menu-icon tf-icons bx bx-home-circle"></i>
               <div data-i18n="Analytics">Users</div>
             </a>
