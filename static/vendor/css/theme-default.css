@@ -219,9 +219,9 @@ button.list-group-item-primary.active {
   box-shadow: 0 0.125rem 0.25rem 0 #889E73;
 }
 .btn-primary:hover {
-  color: #fff !important;
-  background-color: #5f61e6 !important;
-  border-color: #5f61e6 !important;
+  color: #FFF6DA !important;
+  background-color: #889E73; !important;
+  border-color: #889E73; !important;
   transform: translateY(-1px) !important;
 }
 .btn-check:focus + .btn-primary, .btn-primary:focus, .btn-primary.focus {
