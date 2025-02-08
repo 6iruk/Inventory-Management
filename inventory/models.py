@@ -35,7 +35,7 @@ class SysUser(User):
     role = models.CharField(max_length=20, choices=USER_ROLES)
     
     def save(self, *args, **kwargs):
-        self.username = self.phone
+        self.username = self.phone_number
         super(SysUser, self).save(*args, **kwargs)
 
 class Material(models.Model):

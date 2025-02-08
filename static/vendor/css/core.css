@@ -327,7 +327,7 @@ td,
 th {
   border-color: inherit;
   border-style: solid;
-  border-width: 0;
+  border-width: 1px;
 }
 
 label {
@@ -1746,7 +1746,7 @@ progress {
   margin-bottom: 1rem;
   color: var(--bs-table-color);
   vertical-align: middle;
-  border-color: var(--bs-table-border-color);
+  border-color: #a94a4a;
 }
 .table > :not(caption) > * > * {
   padding: 0.625rem 1.25rem;

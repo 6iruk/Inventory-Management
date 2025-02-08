@@ -220,8 +220,8 @@ button.list-group-item-primary.active {
 }
 .btn-primary:hover {
   color: #FFF6DA !important;
-  background-color: #889E73; !important;
-  border-color: #889E73; !important;
+  background-color: #889E73 !important;
+  border-color: #889E73 !important;
   transform: translateY(-1px) !important;
 }
 .btn-check:focus + .btn-primary, .btn-primary:focus, .btn-primary.focus {
