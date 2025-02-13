@@ -27,9 +27,6 @@ class Account(models.Model):
     phone_number = models.CharField(validators=[phone_regex], max_length=17, blank=True, null=True, unique=True)
     role = models.CharField(max_length=20, choices=USER_ROLES)
     
-    def save(self, *args, **kwargs):
-        self.username = self.phone_number
-        super(SysUser, self).save(*args, **kwargs)
 
 class Material(models.Model):
     name = models.CharField(max_length=100)
