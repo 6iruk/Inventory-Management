@@ -7,7 +7,7 @@ from inventory.models import *
 class MaterialForm(ModelForm):
     class Meta:
         model = Material
-        fields = ['name', 'material_type', 'material_code', 'description', 'stock_quantity', 'unit_price']
+        fields = ['name', 'material_type', 'material_code', 'description', 'stock_quantity', 'buying_price', 'unit_price']
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -20,9 +20,10 @@ class MaterialForm(ModelForm):
                 css_class='row'
             ),
             Row(
-                Column('description', css_class='form-group col-md-4 mb-0'),
                 Column('stock_quantity', css_class='form-group col-md-4 mb-0'),
+                Column('buying_price', css_class='form-group col-md-4 mb-0'),
                 Column('unit_price', css_class='form-group col-md-4 mb-0'),
+                Column('description', css_class='form-group col-md-4 mb-0'),
                 css_class='row mb-4'
             ),
             Submit('submit', 'ADD')
