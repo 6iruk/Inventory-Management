@@ -66,6 +66,13 @@
     z-index: 15;
   }
 
+  .hm-menu {
+    color: #fff6da;
+    z-index: 20;
+    float: right;
+    margin-top: -8px;
+  }
+
   #content-div {
     background-color: #F4D793;
   }
@@ -384,4 +391,10 @@
   .error-container {
     color:#fff;
     text-align: center;
+  }
+
+  @media (max-width: 1199.98px) {
+    .nav-title {
+      float: left;
+    }
   }
