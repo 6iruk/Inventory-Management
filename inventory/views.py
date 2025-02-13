@@ -16,7 +16,7 @@ def material(request):
     
     else:
 
-        user = SysUser.objects.get(id=request.user.id)
+        user = Account.objects.get(user=request.user)
         role = user.role.lower()
 
     if request.method == "POST":
