@@ -35,7 +35,9 @@
 
 {% render_table table %}
 
-{% include "inventory/components/forms.html" %}
+{% if user.is_superuser %}
+  {% include "inventory/components/forms.html" %}
+{% endif %}
 
 <!-- Place the script at the bottom of the page before closing body tag -->
 <script>
