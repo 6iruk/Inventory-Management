@@ -1,11 +1,19 @@
 from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth import logout as auth_logout
 from django_tables2 import RequestConfig
 from inventory.forms import *
 from django.urls import reverse
 from inventory.models import *
 from inventory.tables import *
+
+@login_required    
+def logout(request):
+
+    auth_logout(request)
+
+    return HttpResponseRedirect(reverse("login"))
 
 @login_required
 def material(request):
