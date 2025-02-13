@@ -40,11 +40,17 @@ def material(request):
         form = MaterialForm()
 
         if 'query' in request.GET:
-            materials = Material.objects.filter(kifle = request.GET['query'])
+            materials = Material.objects.filter(material_code = request.GET['query'])
         else:
             materials = Material.objects.all()
-            
-        table = MaterialTable(materials)
+        
+        if role == 'admin':
+            table = MaterialTable(materials)
+        elif role == 'manager':
+            table = ManagerMaterialTable(materials)
+        elif role == 'cashier':
+            table = CashierMaterialTable(materials)
+        
         table.paginate(page=request.GET.get("page", 1), per_page=4)
     
     if request.htmx:
