@@ -55,36 +55,60 @@
     <div class="layout-container">
       <!-- Menu -->
       <aside id="layout-menu" class="layout-menu menu-vertical menu bg-menu-theme">
-        <h3 style="padding-top: 0.8rem; text-align:center;">Mulugeta Alemu<br/>Building <br/> Materials</h3>
+        <h3 style="padding-top: 0.8rem; text-align:center; font-size: 3.250rem">MABM</h3>
         <div class="menu-inner-shadow"></div>
         <ul class="menu-inner py-1">
           <!-- Dashboard -->
 
+          {% if user.is_superuser %}
           <li class="menu-item">
             <a hx-get="{% url 'home' %}" hx-target="#content-div" hx-push-url="true"  class="menu-link">
               <i class="menu-icon tf-icons bx bx-home-circle"></i>
               <div data-i18n="Analytics">Materials</div>
             </a>
           </li>
-      
+          {% endif %}
+
+          {% if not role == 'manager' %}
           <li class="menu-item">
             <a hx-get="{% url 'home' %}" hx-target="#content-div" hx-push-url="true"  class="menu-link">
               <i class="menu-icon tf-icons bx bx-home-circle"></i>
               <div data-i18n="Analytics">Sales</div>
             </a>
           </li>
+          {% endif %}
 
+          {% if not role == 'cashier' %}
           <li class="menu-item">
             <a hx-get="{% url 'home' %}" hx-target="#content-div" hx-push-url="true"  class="menu-link">
               <i class="menu-icon tf-icons bx bx-home-circle"></i>
               <div data-i18n="Analytics">Work Orders</div>
             </a>
           </li>
+          {% endif %}
 
+          {% if user.is_superuser %}
+          <li class="menu-item">
+            <a hx-get="{% url 'home' %}" hx-target="#content-div" hx-push-url="true"  class="menu-link">
+              <i class="menu-icon tf-icons bx bx-home-circle"></i>
+              <div data-i18n="Analytics">Employees</div>
+            </a>
+          </li>
+          {% endif %}
+
+          {% if user.is_superuser %}
           <li class="menu-item">
             <a hx-get="{% url 'home' %}" hx-target="#content-div" hx-push-url="true"  class="menu-link">
               <i class="menu-icon tf-icons bx bx-home-circle"></i>
               <div data-i18n="Analytics">Users</div>
+            </a>
+          </li>
+          {% endif %}
+
+          <li class="menu-item">
+            <a hx-get="{% url 'home' %}" hx-target="#content-div" hx-push-url="true"  class="menu-link">
+              <i class="menu-icon tf-icons bx bx-home-circle"></i>
+              <div data-i18n="Analytics">Log Out</div>
             </a>
           </li>
         </ul>
@@ -95,7 +119,15 @@
       <div class="content-wrapper">
         <!-- Content -->
         <div class="text-center bg-menu-theme" id="content-nav" hx-history-elt>
-          <h4>Inventory Management Admin Panel</h4>
+          {% if role == 'admin' %}
+          <h4>Admin Panel</h4>
+
+          {% elif role == 'manager' %}
+          <h4>Manager Account</h4>
+
+          {% elif role == 'cashier' %}
+          <h4>Cashier Account</h4>
+          {% endif %}
         </div>
 
         <div class="container-xxl flex-grow-1 container-p-y" id="content-div" hx-history-elt>

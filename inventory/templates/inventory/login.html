@@ -1,0 +1,71 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
+  <title>MABM</title>
+
+  <!-- Core CSS -->
+  <link rel="stylesheet" href="{% static 'vendor/css/core.css' %}" class="template-customizer-core-css" />
+  <link rel="stylesheet" href="{% static 'vendor/css/theme-default.css' %}" class="template-customizer-theme-css" />
+  <link rel="stylesheet" href="{% static 'css/demo.css' %}" />
+
+  <!-- Page CSS -->
+  <link rel="stylesheet" type="text/css" href="{% static 'css/custom.css' %}">
+  <link rel="stylesheet" type="text/css" href="{% static 'css/util.css' %}">
+</head>
+
+<body>
+
+    <div class="limiter">
+		<div class="container-login100">
+			<div class="wrap-login100 p-t-50 p-b-90">
+
+                <div class="error-container">
+                    {% if form.errors %}
+                        <p>Your username and password didn't match. Please try again.</p>
+                    {% endif %}
+
+                    {% if next %}
+                        {% if user.is_authenticated %}
+                        <p>Your account doesn't have access to this page. To proceed,
+                        please login with an account that has access.</p>
+                        {% else %}
+                        <p>Please login to see this page.</p>
+                        {% endif %}
+                    {% endif %}
+                </div>
+                
+				<form class="login100-form validate-form flex-sb flex-w" data-bitwarden-watching="1" action="{% url 'login' %}" method="POST">
+                    
+                    {% csrf_token %}
+					<span class="login100-form-title p-b-51">
+						Welcome Back,
+					</span>
+
+
+					<div class="wrap-input100 validate-input m-b-16">
+						<input class="input100" type="text" name="username" placeholder="Username">
+						<span class="focus-input100"></span>
+					</div>
+
+
+					<div class="wrap-input100 validate-input m-b-16">
+						<input class="input100" type="password" name="password" placeholder="Password">
+						<span class="focus-input100"></span>
+					</div>
+
+					<div class="container-login100-form-btn m-t-17">
+						<button class="login100-form-btn" type="submit">
+							Login
+                        </button>
+                        <input type="hidden" name="next" value="{{ next }}">
+					</div>
+
+				</form>
+			</div>
+		</div>
+	</div>
+</body>
+</html>
