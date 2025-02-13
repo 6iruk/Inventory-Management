@@ -1,4 +1,8 @@
 /* Table style */
+.table-container {
+  overflow-x: auto;
+}
+
 .table-container th.asc:after {
     content: '\0000a0\0025b2';
     float: right;
