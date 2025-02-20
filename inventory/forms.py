@@ -28,3 +28,70 @@ class MaterialForm(ModelForm):
             ),
             Submit('submit', 'ADD')
         )
+
+class SaleForm(ModelForm):
+    class Meta:
+        model = Sale
+        fields = ['material', 'quantity', 'sales_date', 'notes']
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.layout = Layout(
+            Row(
+                Column('material', css_class='form-group col-md-4 mb-0'),
+                Column('quantity', css_class='form-group col-md-4 mb-0'),
+                Column('sales_date', css_class='form-group col-md-4 mb-0'),
+                css_class='row'
+            ),
+            Row(
+                Column('notes', css_class='form-group col-md-4 mb-0'),
+                css_class='row mb-4'
+            ),
+            Submit('submit', 'ADD')
+        )
+
+class EmployeeForm(ModelForm):
+    class Meta:
+        model = Employee
+        fields = ['name', 'phone_number','notes', 'is_active']
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.layout = Layout(
+            Row(
+                Column('name', css_class='form-group col-md-4 mb-0'),
+                Column('phone_number', css_class='form-group col-md-4 mb-0'),
+                Column('notes', css_class='form-group col-md-4 mb-0'),
+                css_class='row'
+            ),
+            Row(
+                Column('is_active', css_class='form-group col-md-4 mb-0'),
+                css_class='row mb-4'
+            ),
+            Submit('submit', 'ADD')
+        )
+
+class OrderForm(ModelForm):
+    class Meta:
+        model = Order
+        fields = ['employee', 'material','quantity', 'order_date', 'notes']
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.layout = Layout(
+            Row(
+                Column('employee', css_class='form-group col-md-4 mb-0'),
+                Column('material', css_class='form-group col-md-4 mb-0'),
+                Column('quantity', css_class='form-group col-md-4 mb-0'),
+                css_class='row'
+            ),
+            Row(
+                Column('order_date', css_class='form-group col-md-4 mb-0'),
+                Column('notes', css_class='form-group col-md-4 mb-0'),
+                css_class='row mb-4'
+            ),
+            Submit('submit', 'ADD')
+        )
