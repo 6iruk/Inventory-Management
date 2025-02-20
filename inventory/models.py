@@ -22,13 +22,6 @@ DEPARTMENTS = [
 
 phone_regex = RegexValidator(regex=r'^\+?1?\d{9,15}$', message="Phone number must be entered in the format: '+999999999'. Up to 15 digits allowed.")
 
-class Account(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    phone_number = models.CharField(validators=[phone_regex], max_length=17, blank=True, null=True, unique=True)
-    role = models.CharField(max_length=20, choices=USER_ROLES)
-    
-    def __str__(self):
-        return self.phone_number
 
 class Material(models.Model):
     name = models.CharField(max_length=100)
@@ -41,20 +34,26 @@ class Material(models.Model):
 
     def __str__(self):
         return self.material_code
-    
+
+class Sale(models.Model):
+    material = models.ForeignKey(Material, on_delete=models.CASCADE)
+    quantity = models.PositiveIntegerField()
+    sales_date = models.DateTimeField()
+    notes = models.TextField(blank=True, null=True)
+
+    def __str__(self):
+        return self.material + str(self.quantity)
+
 class Employee(models.Model):
     name = models.CharField(max_length=100)
     phone_number = models.CharField(max_length=20, unique=True)
-    photo = models.EmailField(unique=True, null=True, blank=True)
-    department_name =  models.CharField(max_length=20, choices=DEPARTMENTS)
-    employee_type = models.CharField(max_length=20, choices=EMPLOYEE_TYPES)
     notes = models.TextField(blank=True, null=True)
     is_active = models.BooleanField(default=True)
 
     def __str__(self):
         return self.phone_number
     
-class WorkOrder(models.Model):
+class Order(models.Model):
     employee = models.ForeignKey(Employee, on_delete=models.CASCADE)
     material = models.ForeignKey(Material, on_delete=models.CASCADE)
     quantity = models.PositiveIntegerField()
@@ -64,11 +63,10 @@ class WorkOrder(models.Model):
     def __str__(self):
         return self.material + str(self.quantity)
     
-class Sales(models.Model):
-    material = models.ForeignKey(Material, on_delete=models.CASCADE)
-    quantity = models.PositiveIntegerField()
-    sales_date = models.DateTimeField()
-    notes = models.TextField(blank=True, null=True)
-
+class Account(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    phone_number = models.CharField(validators=[phone_regex], max_length=17, blank=True, null=True, unique=True)
+    role = models.CharField(max_length=20, choices=USER_ROLES)
+    
     def __str__(self):
-        return self.material + str(self.quantity)
+        return self.phone_number
