@@ -61,7 +61,7 @@
           <!-- Dashboard -->
 
           <li class="menu-item">
-            <a hx-get="{% url 'home' %}" hx-target="#content-div" hx-push-url="true"  class="menu-link">
+            <a hx-get="{% url 'material' %}" hx-target="#content-div" hx-push-url="true"  class="menu-link">
               <i class="menu-icon tf-icons bx bx-home-circle"></i>
               <div data-i18n="Analytics">Materials</div>
             </a>
@@ -69,34 +69,34 @@
 
           {% if not role == 'manager' %}
           <li class="menu-item">
-            <a hx-get="{% url 'home' %}" hx-target="#content-div" hx-push-url="true"  class="menu-link">
+            <a hx-get="{% url 'sale' %}" hx-target="#content-div" hx-push-url="true"  class="menu-link">
               <i class="menu-icon tf-icons bx bx-home-circle"></i>
               <div data-i18n="Analytics">Sales</div>
             </a>
           </li>
           {% endif %}
 
-          {% if not role == 'cashier' %}
-          <li class="menu-item">
-            <a hx-get="{% url 'home' %}" hx-target="#content-div" hx-push-url="true"  class="menu-link">
-              <i class="menu-icon tf-icons bx bx-home-circle"></i>
-              <div data-i18n="Analytics">Work Orders</div>
-            </a>
-          </li>
-          {% endif %}
-
           {% if user.is_superuser %}
           <li class="menu-item">
-            <a hx-get="{% url 'home' %}" hx-target="#content-div" hx-push-url="true"  class="menu-link">
+            <a hx-get="{% url 'employee' %}" hx-target="#content-div" hx-push-url="true"  class="menu-link">
               <i class="menu-icon tf-icons bx bx-home-circle"></i>
               <div data-i18n="Analytics">Employees</div>
             </a>
           </li>
           {% endif %}
 
+          {% if not role == 'cashier' %}
+          <li class="menu-item">
+            <a hx-get="{% url 'order' %}" hx-target="#content-div" hx-push-url="true"  class="menu-link">
+              <i class="menu-icon tf-icons bx bx-home-circle"></i>
+              <div data-i18n="Analytics">Orders</div>
+            </a>
+          </li>
+          {% endif %}
+
           {% if user.is_superuser %}
           <li class="menu-item">
-            <a hx-get="{% url 'home' %}" hx-target="#content-div" hx-push-url="true"  class="menu-link">
+            <a hx-get="{% url 'user' %}" hx-target="#content-div" hx-push-url="true"  class="menu-link">
               <i class="menu-icon tf-icons bx bx-home-circle"></i>
               <div data-i18n="Analytics">Users</div>
             </a>
@@ -126,10 +126,20 @@
           </h4>
 
           {% elif role == 'manager' %}
-          <h4>Manager Account</h4>
+          <h4> <span class="nav-title">Manager Account</span><span class="hm-menu">
+            <a onClick="NavMenuClick()">
+              <i class="bx bx-menu bx-md"></i>
+            </a>
+            </span>
+          </h4>
 
           {% elif role == 'cashier' %}
-          <h4>Cashier Account</h4>
+          <h4> <span class="nav-title">Cashier Account</span><span class="hm-menu">
+            <a onClick="NavMenuClick()">
+              <i class="bx bx-menu bx-md"></i>
+            </a>
+            </span>
+          </h4>
           {% endif %}
         </div>
 

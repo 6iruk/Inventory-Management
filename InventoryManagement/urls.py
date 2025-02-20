@@ -24,5 +24,10 @@ urlpatterns = [
             auth_views.LoginView.as_view(template_name="inventory/login.html"), name='login'),
     path('logout', views.logout, name='logout'),
     path('home', views.material, name='home'),
+    path('material', views.material, name='material'),
+    path('sale', views.sale, name='sale'),
+    path('employee', views.employee, name='employee'),
+    path('order', views.order, name='order'),
+    path('user', views.user, name='user'),
     path('admin/', admin.site.urls),
 ]
