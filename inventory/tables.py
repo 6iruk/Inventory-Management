@@ -16,3 +16,21 @@ class CashierMaterialTable(tables.Table):
     class Meta:
         model = Material
         fields = ['name', 'material_type', 'material_code', 'description', 'stock_quantity', 'unit_price']
+
+
+class SaleTable(tables.Table):
+    class Meta:
+        model = Sale
+        fields = ['material', 'quantity', 'sales_date', 'notes']
+
+
+class EmployeeTable(tables.Table):
+    class Meta:
+        model = Employee
+        fields = ['name', 'phone_number','notes', 'is_active']
+
+
+class OrderTable(tables.Table):
+    class Meta:
+        model = Order
+        fields = ['employee', 'material','quantity', 'order_date', 'notes']
