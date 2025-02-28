@@ -2,6 +2,7 @@ from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import logout as auth_logout
+from django.db.models import Q
 from django_tables2 import RequestConfig
 from inventory.forms import *
 from django.urls import reverse
@@ -40,16 +41,25 @@ def material(request):
         form = MaterialForm()
 
         if 'query' in request.GET:
-            materials = Material.objects.filter(material_code = request.GET['query'])
+            materials = Material.objects.filter(Q(name__icontains = request.GET['query']) | Q(material_type__icontains = request.GET['query']) | Q(material_code__icontains = request.GET['query']))
+
+            if request.GET['query'].isdigit():
+                materials = materials.filter(Q(stock_quantity = int(request.GET['query'])))
+            
+            try:
+                materials = materials.filter(Q(buying_price = float(request.GET['query'])) | Q(unit_price = float(request.GET['query'])))
+            except ValueError:
+                pass
+       
         else:
             materials = Material.objects.all()
         
         if role == 'admin':
-            table = MaterialTable(materials)
+            table = MaterialTable(materials, order_by = request.GET.get('sort'))
         elif role == 'manager':
-            table = ManagerMaterialTable(materials)
+            table = ManagerMaterialTable(materials, order_by = request.GET.get('sort'))
         elif role == 'cashier':
-            table = CashierMaterialTable(materials)
+            table = CashierMaterialTable(materials, order_by = request.GET.get('sort'))
         
         table.paginate(page=request.GET.get("page", 1), per_page=4)
     
@@ -83,14 +93,18 @@ def sale(request):
         form = SaleForm()
 
         if 'query' in request.GET:
-            sales = Sale.objects.filter(material_code = request.GET['query'])
+            sales = Sale.objects.filter(Q(material__name__icontains = request.GET['query']) | Q(material__material_type__icontains = request.GET['query']) | Q(material__material_code__icontains = request.GET['query']))
+
+            if request.GET['query'].isdigit():
+                sales = sales.filter(Q(quantity = int(request.GET['query'])))
+        
         else:
             sales = Sale.objects.all()
         
         if role == 'admin':
-            table = SaleTable(sales)
+            table = SaleTable(sales, order_by = request.GET.get('sort'))
         elif role == 'cashier':
-            table = SaleTable(sales)
+            table = SaleTable(sales, order_by = request.GET.get('sort'))
         
         table.paginate(page=request.GET.get("page", 1), per_page=4)
     
@@ -123,12 +137,13 @@ def employee(request):
         form = EmployeeForm()
 
         if 'query' in request.GET:
-            employees = Employee.objects.filter(material_code = request.GET['query'])
+            employees = Employee.objects.filter(Q(name__icontains = request.GET['query']) | Q(phone_number__icontains = request.GET['query']))
+        
         else:
             employees = Employee.objects.all()
         
         if role == 'admin':
-            table = EmployeeTable(employees)
+            table = EmployeeTable(employees, order_by = request.GET.get('sort'))
         
         table.paginate(page=request.GET.get("page", 1), per_page=4)
     
@@ -162,14 +177,18 @@ def order(request):
         form = OrderForm()
 
         if 'query' in request.GET:
-            orders = Order.objects.filter(material_code = request.GET['query'])
+            orders = Order.objects.filter(Q(material__name__icontains = request.GET['query']) | Q(material__material_type__icontains = request.GET['query']) | Q(material__material_code__icontains = request.GET['query']) | Q(employee__name__icontains = request.GET['query']) | Q(employee__phone_number__icontains = request.GET['query']))
+
+            if request.GET['query'].isdigit():
+                orders = orders.filter(Q(quantity = int(request.GET['query'])))
+        
         else:
             orders = Order.objects.all()
         
         if role == 'admin':
-            table = OrderTable(orders)
+            table = OrderTable(orders, order_by = request.GET.get('sort'))
         elif role == 'manager':
-            table = OrderTable(orders)
+            table = OrderTable(orders, order_by = request.GET.get('sort'))
         
         table.paginate(page=request.GET.get("page", 1), per_page=4)
     

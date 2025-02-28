@@ -3,6 +3,7 @@ from django.forms import ModelForm
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, Submit, Row, Column
 from inventory.models import *
+from django.contrib.admin.widgets import AdminDateWidget
 
 class MaterialForm(ModelForm):
     class Meta:
@@ -33,7 +34,10 @@ class SaleForm(ModelForm):
     class Meta:
         model = Sale
         fields = ['material', 'quantity', 'sales_date', 'notes']
-
+        widgets = {
+            'sales_date':forms.DateTimeInput(attrs={'type':'date'}),
+        }
+        
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.helper = FormHelper()
@@ -77,7 +81,10 @@ class OrderForm(ModelForm):
     class Meta:
         model = Order
         fields = ['employee', 'material','quantity', 'order_date', 'notes']
-
+        widgets = {
+            'order_date':forms.DateTimeInput(attrs={'type':'date'}),
+        }
+        
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.helper = FormHelper()
