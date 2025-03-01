@@ -35,7 +35,7 @@ class SaleForm(ModelForm):
         model = Sale
         fields = ['material', 'quantity', 'sales_date', 'notes']
         widgets = {
-            'sales_date':forms.DateTimeInput(attrs={'type':'date'}),
+            'sales_date':forms.DateInput(attrs={'type':'date'}),
         }
         
     def __init__(self, *args, **kwargs):
@@ -82,7 +82,7 @@ class OrderForm(ModelForm):
         model = Order
         fields = ['employee', 'material','quantity', 'order_date', 'notes']
         widgets = {
-            'order_date':forms.DateTimeInput(attrs={'type':'date'}),
+            'order_date':forms.DateInput(attrs={'type':'date'}),
         }
         
     def __init__(self, *args, **kwargs):

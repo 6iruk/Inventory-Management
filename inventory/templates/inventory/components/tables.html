@@ -1,7 +1,7 @@
 {% load render_table from django_tables2 %}
 {% load static %}
     {# Search form #}
-    <form hx-get="{{action_url}}"
+    <form hx-get="{% url action_url %}"
           hx-target="#content-div" 
           hx-indicator=".progress"
           hx-push-url="true"

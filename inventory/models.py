@@ -38,11 +38,11 @@ class Material(models.Model):
 class Sale(models.Model):
     material = models.ForeignKey(Material, on_delete=models.CASCADE)
     quantity = models.PositiveIntegerField()
-    sales_date = models.DateTimeField()
+    sales_date = models.DateField()
     notes = models.TextField(blank=True, null=True)
 
     def __str__(self):
-        return self.material + str(self.quantity)
+        return self.material.material_code +  ' - ' + str(self.quantity)
 
 class Employee(models.Model):
     name = models.CharField(max_length=100)
@@ -57,7 +57,7 @@ class Order(models.Model):
     employee = models.ForeignKey(Employee, on_delete=models.CASCADE)
     material = models.ForeignKey(Material, on_delete=models.CASCADE)
     quantity = models.PositiveIntegerField()
-    order_date = models.DateTimeField()
+    order_date = models.DateField()
     notes = models.TextField(blank=True, null=True)
 
     def __str__(self):
