@@ -30,7 +30,7 @@ class Material(models.Model):
     description = models.TextField(blank=True, null=True)
     stock_quantity = models.PositiveIntegerField(default=0)
     buying_price = models.DecimalField(decimal_places=2, max_digits=10, null=True)
-    unit_price = models.DecimalField(decimal_places=2, max_digits=10)
+    selling_price = models.DecimalField(decimal_places=2, max_digits=10)
 
     def __str__(self):
         return self.material_code + '-' + self.material_type + '-' + self.name

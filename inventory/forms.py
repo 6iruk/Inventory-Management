@@ -8,7 +8,7 @@ from django.contrib.admin.widgets import AdminDateWidget
 class MaterialForm(ModelForm):
     class Meta:
         model = Material
-        fields = ['name', 'material_type', 'material_code', 'description', 'stock_quantity', 'buying_price', 'unit_price']
+        fields = ['name', 'material_type', 'material_code', 'description', 'stock_quantity', 'buying_price', 'selling_price']
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

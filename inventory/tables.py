@@ -5,7 +5,7 @@ from inventory.models import *
 class MaterialTable(tables.Table):
     class Meta:
         model = Material
-        fields = ['name', 'material_type', 'material_code', 'description', 'stock_quantity', 'buying_price', 'unit_price']
+        fields = ['name', 'material_type', 'material_code', 'description', 'stock_quantity', 'buying_price', 'selling_price']
 
 class ManagerMaterialTable(tables.Table):
     class Meta:
@@ -15,7 +15,7 @@ class ManagerMaterialTable(tables.Table):
 class CashierMaterialTable(tables.Table):
     class Meta:
         model = Material
-        fields = ['name', 'material_type', 'material_code', 'description', 'stock_quantity', 'unit_price']
+        fields = ['name', 'material_type', 'material_code', 'description', 'stock_quantity', 'selling_price']
 
 
 class SaleTable(tables.Table):
