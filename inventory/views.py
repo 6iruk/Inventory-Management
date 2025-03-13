@@ -268,7 +268,7 @@ class SaleReport(ReportView):
             Sum, "quantity", verbose_name="Total quantity sold", is_summable=False
         ),
         ComputationField.create(
-            Sum, "material__unit_price", name="sum__value", verbose_name="Total Value sold $"
+            Sum, "material__selling_price", name="sum__value", verbose_name="Total Value sold $"
         ),
     ]
 
