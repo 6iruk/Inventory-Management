@@ -44,6 +44,12 @@ class Sale(models.Model):
     def __str__(self):
         return self.material.material_code +  ' - ' + str(self.quantity)
 
+    def save(self, **kwargs):
+        self.material.stock_quantity -= self.quantity
+        self.material.save()
+
+        super().save(**kwargs)
+
 class Employee(models.Model):
     name = models.CharField(max_length=100)
     phone_number = models.CharField(max_length=20, unique=True)
@@ -62,7 +68,13 @@ class Order(models.Model):
 
     def __str__(self):
         return self.material + str(self.quantity)
-    
+
+    def save(self, **kwargs):
+        self.material.stock_quantity -= self.quantity
+        self.material.save()
+        
+        super().save(**kwargs)
+
 class Account(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     phone_number = models.CharField(validators=[phone_regex], max_length=17, blank=True, null=True, unique=True)

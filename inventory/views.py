@@ -89,7 +89,6 @@ def sale(request):
         form = SaleForm(request.POST)
 
         if form.is_valid():
-            print(form.cleaned_data.get('material'))
 
             form.save()
             return HttpResponseRedirect(reverse("sale"))

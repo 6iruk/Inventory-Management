@@ -59,7 +59,7 @@ class SaleForm(ModelForm):
         super().clean()
         quantity = self.cleaned_data.get("quantity")
         material = self.cleaned_data.get("material")
-        print(material.stock_quantity)
+
         if material.stock_quantity < quantity:
             raise ValidationError(
                 f'Only {material.stock_quantity} left'
