@@ -29,5 +29,7 @@ urlpatterns = [
     path('employee', views.employee, name='employee'),
     path('order', views.order, name='order'),
     path('user', views.user, name='user'),
+    path('report', views.report, name='report'),
+    path("sale-report", views.SaleReport.as_view(), name='sale-report'),
     path('admin/', admin.site.urls),
 ]

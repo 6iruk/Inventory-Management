@@ -226,8 +226,8 @@ button.list-group-item-primary.active {
 }
 .btn-check:focus + .btn-primary, .btn-primary:focus, .btn-primary.focus {
   color: #fff;
-  background-color: #5f61e6;
-  border-color: #5f61e6;
+  background-color: #889E73;
+  border-color: #889E73;
   transform: translateY(0);
   box-shadow: none;
 }
@@ -585,7 +585,7 @@ a:hover {
 }
 
 .bg-navbar-theme {
-  background-color: #fff !important;
+  background-color: #fff6da !important;
   color: #A94A4A;
 }
 .bg-navbar-theme .navbar-brand,

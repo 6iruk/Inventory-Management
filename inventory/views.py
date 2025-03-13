@@ -4,6 +4,9 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth import logout as auth_logout
 from django.db.models import Q
 from django_tables2 import RequestConfig
+from django.db.models import Sum
+from slick_reporting.views import ReportView, Chart
+from slick_reporting.fields import ComputationField
 from inventory.forms import *
 from django.urls import reverse
 from inventory.models import *
@@ -19,7 +22,6 @@ def logout(request):
 @login_required
 def material(request):
     
-    role = ''
     if request.user.is_superuser:
         role = 'admin'
     
@@ -28,7 +30,8 @@ def material(request):
         user = Account.objects.get(user=request.user)
         role = user.role.lower()
 
-    if request.method == "POST":
+
+    if request.method == "POST" and role == 'admin':
 
         form = MaterialForm(request.POST)
 
@@ -37,20 +40,21 @@ def material(request):
             form.save()
             return HttpResponseRedirect(reverse("home"))
 
-    else:
+    elif role == 'admin':
         form = MaterialForm()
 
-    if 'query' in request.GET:
-        materials = Material.objects.filter(Q(name__icontains = request.GET['query']) | Q(material_type__icontains = request.GET['query']) | Q(material_code__icontains = request.GET['query']))
+    else:
+        form = None
 
-        if request.GET['query'].isdigit():
-            materials = materials.filter(Q(stock_quantity = int(request.GET['query'])))
+
+    if 'query' in request.GET:
+        materials = Material.objects.filter(Q(name__icontains = request.GET['query']) | Q(material_type__icontains = request.GET['query']) | Q(material_code__icontains = request.GET['query']) | Q(description__icontains = request.GET['query']))
+        print(request.GET['query'].isdigit())
         
         try:
-            materials = materials.filter(Q(buying_price = float(request.GET['query'])) | Q(unit_price = float(request.GET['query'])))
+            materials = materials.union(Material.objects.filter(Q(stock_quantity = float(request.GET['query'])) | Q(buying_price = float(request.GET['query'])) | Q(unit_price = float(request.GET['query']))))
         except ValueError:
             pass
-    
     else:
         materials = Material.objects.all()
     
@@ -85,6 +89,7 @@ def sale(request):
         form = SaleForm(request.POST)
 
         if form.is_valid():
+            print(form.cleaned_data.get('material'))
 
             form.save()
             return HttpResponseRedirect(reverse("sale"))
@@ -237,3 +242,48 @@ def user(request):
         return render(request, 'inventory/components/tables.html', {"table":table, "form": form, "header":'Order', "action_url":'material', "role":role})
     else:
         return render(request, 'inventory/components/tables_full.html', {"table":table, "form": form, "header":'Order', "action_url":'material', "role":role})
+
+@login_required
+def report(request):
+    
+    role = ''
+    if request.user.is_superuser:
+        role = 'admin'
+    
+    else:
+        return HttpResponseRedirect(reverse("home"))
+    
+    report = SaleReport.as_view()(request)
+    if request.htmx or request.headers.get('X-Requested-With') and request.headers['X-Requested-With'] == 'XMLHttpRequest':
+        return report
+    else:
+        return render(request, 'inventory/components/report_full.html', {'report': report.render().content.decode('utf-8'), 'role': role})
+    
+class SaleReport(ReportView):
+    report_model = Sale
+    date_field = "sales_date"
+    group_by = "material"
+    columns = [
+        "name",
+        ComputationField.create(
+            Sum, "quantity", verbose_name="Total quantity sold", is_summable=False
+        ),
+        ComputationField.create(
+            Sum, "material__unit_price", name="sum__value", verbose_name="Total Value sold $"
+        ),
+    ]
+
+    chart_settings = [
+        Chart(
+            "Total sold $",
+            Chart.COLUMN,
+            data_source=["sum__value"],
+            title_source=["name"],
+        ),
+        Chart(
+            "Total sold $ [PIE]",
+            Chart.PIE,
+            data_source=["sum__value"],
+            title_source=["name"],
+        ),
+    ]

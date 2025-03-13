@@ -55,6 +55,16 @@ class SaleForm(ModelForm):
             Submit('submit', 'ADD')
         )
 
+    def clean(self):
+        super().clean()
+        quantity = self.cleaned_data.get("quantity")
+        material = self.cleaned_data.get("material")
+        print(material.stock_quantity)
+        if material.stock_quantity < quantity:
+            raise ValidationError(
+                f'Only {material.stock_quantity} left'
+            )
+
 class EmployeeForm(ModelForm):
     class Meta:
         model = Employee
@@ -102,3 +112,13 @@ class OrderForm(ModelForm):
             ),
             Submit('submit', 'ADD')
         )
+
+    def clean(self):
+        super().clean()
+        quantity = self.cleaned_data.get("quantity")
+        material = self.cleaned_data.get("material")
+        
+        if material.stock_quantity < quantity:
+            raise ValidationError(
+                f'Only {material.stock_quantity} left'
+            )

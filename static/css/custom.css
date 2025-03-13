@@ -397,6 +397,10 @@
     text-align: center;
   }
 
+  .page-title {
+    color: #a94a4a;
+  }
+
   @media (max-width: 1199.98px) {
     .nav-title {
       float: left;

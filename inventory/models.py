@@ -33,7 +33,7 @@ class Material(models.Model):
     unit_price = models.DecimalField(decimal_places=2, max_digits=10)
 
     def __str__(self):
-        return self.material_code
+        return self.material_code + '-' + self.material_type + '-' + self.name
 
 class Sale(models.Model):
     material = models.ForeignKey(Material, on_delete=models.CASCADE)

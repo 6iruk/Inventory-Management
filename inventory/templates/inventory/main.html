@@ -55,10 +55,28 @@
     <div class="layout-container">
       <!-- Menu -->
       <aside id="layout-menu" class="layout-menu menu-vertical menu bg-menu-theme">
-        <h3 style="padding-top: 0.8rem; text-align:center; font-size: 3.250rem">MABM</h3>
+        <h3 style="padding-top: 0.8rem; text-align:center; font-size: 2.850rem">MABM</h3>
         <div class="menu-inner-shadow"></div>
         <ul class="menu-inner py-1">
           <!-- Dashboard -->
+
+          {% if user.is_superuser %}
+          <li class="menu-item" hidden>
+            <a id="dashboard-link" hx-get="{% url 'report' %}" hx-target="#content-div" hx-push-url="true"  class="menu-link">
+              <i class="menu-icon tf-icons bx bx-home-circle"></i>
+              <div data-i18n="Analytics">Dashboard</div>
+            </a>
+          </li>
+          {% endif %}
+
+          {% if user.is_superuser %}
+          <li class="menu-item">
+            <a  href="{% url 'report' %}" class="menu-link">
+              <i class="menu-icon tf-icons bx bx-home-circle"></i>
+              <div data-i18n="Analytics">Dashboard</div>
+            </a>
+          </li>
+          {% endif %}
 
           <li class="menu-item">
             <a hx-get="{% url 'material' %}" hx-target="#content-div" hx-push-url="true"  class="menu-link">
@@ -170,5 +188,6 @@
       }
     }
     </script>
+    {% block extrajs %} {% endblock extrajs %}
 </body>
 </html>

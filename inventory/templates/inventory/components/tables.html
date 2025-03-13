@@ -6,7 +6,7 @@
           hx-indicator=".progress"
           hx-push-url="true"
           class="form-inline">
-          <nav class="layout-navbar container-xxl navbar navbar-expand-xl navbar-detached align-items-center bg-navbar-theme" id="layout-navbar">
+          <nav class="navbar navbar-expand-xl align-items-center bg-navbar-theme w-25 px-2" id="layout-navbar">
             <div class="navbar-nav-right d-flex align-items-center" id="navbar-collapse">
               <!-- Search -->
               <div class="navbar-nav align-items-center">
@@ -17,7 +17,7 @@
               </div>
               <!-- /Search -->
             </div>
-            <input type="submit" name="submit" value="Search" class="btn btn-primary" id="submit-id-submit"/>
+            <input type="submit" value="Submit" class="btn btn-primary" id="submit-id-submit"/>
           </nav>
           
     </form>
@@ -31,7 +31,7 @@
 
 {% render_table table %}
 
-{% if user.is_superuser %}
+{% if form %}
   {% include "inventory/components/forms.html" %}
 {% endif %}
 
