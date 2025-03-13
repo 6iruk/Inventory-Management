@@ -23,7 +23,7 @@ class MaterialForm(ModelForm):
             Row(
                 Column('stock_quantity', css_class='form-group col-md-4 mb-0'),
                 Column('buying_price', css_class='form-group col-md-4 mb-0'),
-                Column('unit_price', css_class='form-group col-md-4 mb-0'),
+                Column('selling_price', css_class='form-group col-md-4 mb-0'),
                 Column('description', css_class='form-group col-md-4 mb-0'),
                 css_class='row mb-4'
             ),
