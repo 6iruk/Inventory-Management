@@ -4,6 +4,7 @@ from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, Submit, Row, Column
 from inventory.models import *
 from django.contrib.admin.widgets import AdminDateWidget
+from slick_reporting.forms import BaseReportForm
 
 class MaterialForm(ModelForm):
     class Meta:
@@ -122,3 +123,36 @@ class OrderForm(ModelForm):
             raise ValidationError(
                 f'Only {material.stock_quantity} left'
             )
+        
+class ReportForm(BaseReportForm, forms.Form):
+
+    REPORT_CHOICES = (
+        ("sales", "Sales"),
+        ("orders", "Orders"),
+    )
+
+    start_date = forms.DateField(
+        required=False,
+        label="Start Date",
+        widget=forms.DateInput(attrs={"type": "date"}),
+    )
+    end_date = forms.DateField(
+        required=False, label="End Date", widget=forms.DateInput(attrs={"type": "date"})
+    )
+
+    report = forms.ChoiceField(
+        choices=REPORT_CHOICES, label="Report Type", initial="sales"
+    )
+
+    def get_filters(self):
+        filters = {}
+        q_filters = []
+
+
+        return q_filters, filters
+
+    def get_start_date(self):
+        return self.cleaned_data["start_date"]
+
+    def get_end_date(self):
+        return self.cleaned_data["end_date"]
