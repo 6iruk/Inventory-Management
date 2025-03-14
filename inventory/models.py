@@ -38,6 +38,7 @@ class Material(models.Model):
 class Sale(models.Model):
     material = models.ForeignKey(Material, on_delete=models.CASCADE)
     quantity = models.PositiveIntegerField()
+    price = models.DecimalField(decimal_places=2, max_digits=10, null=True)
     sales_date = models.DateField()
     notes = models.TextField(blank=True, null=True)
 
@@ -46,6 +47,7 @@ class Sale(models.Model):
 
     def save(self, **kwargs):
         self.material.stock_quantity -= self.quantity
+        self.price = self.quantity * self.material.selling_price
         self.material.save()
 
         super().save(**kwargs)
@@ -62,6 +64,7 @@ class Employee(models.Model):
 class Order(models.Model):
     employee = models.ForeignKey(Employee, on_delete=models.CASCADE)
     material = models.ForeignKey(Material, on_delete=models.CASCADE)
+    price = models.DecimalField(decimal_places=2, max_digits=10, null=True)
     quantity = models.PositiveIntegerField()
     order_date = models.DateField()
     notes = models.TextField(blank=True, null=True)
@@ -71,6 +74,7 @@ class Order(models.Model):
 
     def save(self, **kwargs):
         self.material.stock_quantity -= self.quantity
+        self.price = self.quantity * self.material.selling_price
         self.material.save()
         
         super().save(**kwargs)
