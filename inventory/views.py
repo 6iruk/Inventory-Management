@@ -32,16 +32,33 @@ def material(request):
 
 
     if request.method == "POST" and role == 'admin':
-
-        form = MaterialForm(request.POST)
+        if request.POST.get('id'):
+            id = int(request.POST['id'])
+            material = Material.objects.get(id = id)
+            form = MaterialForm(request.POST, instance = material)
+        
+        else:
+            form = MaterialForm(request.POST)
 
         if form.is_valid():
 
             form.save()
-            return HttpResponseRedirect(reverse("home"))
+            return HttpResponseRedirect(reverse("material"))
 
     elif role == 'admin':
-        form = MaterialForm()
+        if request.GET.get('id'):
+            id = int(request.GET['id'])
+            material = Material.objects.get(id = id)
+
+            if request.GET.get('del'):
+                material.delete()
+
+                return HttpResponseRedirect(reverse("material"))
+            else:
+                form = MaterialForm(instance = material)
+
+        else:
+            form = MaterialForm()
 
     else:
         form = None
@@ -49,7 +66,6 @@ def material(request):
 
     if 'query' in request.GET:
         materials = Material.objects.filter(Q(name__icontains = request.GET['query']) | Q(material_type__icontains = request.GET['query']) | Q(material_code__icontains = request.GET['query']) | Q(description__icontains = request.GET['query']))
-        print(request.GET['query'].isdigit())
         
         try:
             materials = materials.union(Material.objects.filter(Q(stock_quantity = float(request.GET['query'])) | Q(buying_price = float(request.GET['query'])) | Q(unit_price = float(request.GET['query']))))
@@ -85,13 +101,33 @@ def sale(request):
         role = user.role.lower()
 
     if request.method == "POST":
-
-        form = SaleForm(request.POST)
+        if  role == 'admin' and request.POST.get('id'):
+            id = int(request.POST['id'])
+            sale = Sale.objects.get(id = id)
+            form = SaleForm(request.POST, instance = sale)
+        
+        else:
+            form = SaleForm(request.POST)
 
         if form.is_valid():
 
             form.save()
             return HttpResponseRedirect(reverse("sale"))
+
+    elif role == 'admin':
+        if request.GET.get('id'):
+            id = int(request.GET['id'])
+            sale = Sale.objects.get(id = id)
+
+            if request.GET.get('del'):
+                sale.delete()
+
+                return HttpResponseRedirect(reverse("sale"))
+            else:
+                form = SaleForm(instance = sale)
+
+        else:
+            form = SaleForm()
 
     else:
         form = SaleForm()
@@ -108,7 +144,7 @@ def sale(request):
     if role == 'admin':
         table = SaleTable(sales, order_by = request.GET.get('sort'))
     elif role == 'cashier':
-        table = SaleTable(sales, order_by = request.GET.get('sort'))
+        table = CashierSaleTable(sales, order_by = request.GET.get('sort'))
     
     table.paginate(page=request.GET.get("page", 1), per_page=4)
     
@@ -169,13 +205,33 @@ def order(request):
         role = user.role.lower()
 
     if request.method == "POST":
-
-        form = OrderForm(request.POST)
+        if  role == 'admin' and request.POST.get('id'):
+            id = int(request.POST['id'])
+            order = Order.objects.get(id = id)
+            form = OrderForm(request.POST, instance = order)
+        
+        else:
+            form = OrderForm(request.POST)
 
         if form.is_valid():
 
             form.save()
             return HttpResponseRedirect(reverse("order"))
+
+    elif role == 'admin':
+        if request.GET.get('id'):
+            id = int(request.GET['id'])
+            order = Order.objects.get(id = id)
+
+            if request.GET.get('del'):
+                order.delete()
+
+                return HttpResponseRedirect(reverse("order"))
+            else:
+                form = OrderForm(instance = order)
+
+        else:
+            form = OrderForm()
 
     else:
         form = OrderForm()
@@ -192,7 +248,7 @@ def order(request):
     if role == 'admin':
         table = OrderTable(orders, order_by = request.GET.get('sort'))
     elif role == 'manager':
-        table = OrderTable(orders, order_by = request.GET.get('sort'))
+        table = ManagerOrderTable(orders, order_by = request.GET.get('sort'))
     
     table.paginate(page=request.GET.get("page", 1), per_page=4)
     
@@ -233,7 +289,7 @@ def user(request):
         if role == 'admin':
             table = OrderTable(orders)
         elif role == 'manager':
-            table = OrderTable(orders)
+            table = ManagerOrderTable(orders)
         
         table.paginate(page=request.GET.get("page", 1), per_page=4)
     
@@ -257,32 +313,68 @@ def report(request):
         return report
     else:
         return render(request, 'inventory/components/report_full.html', {'report': report.render().content.decode('utf-8'), 'role': role})
-    
+
 class SaleReport(ReportView):
-    report_model = Sale
-    date_field = "sales_date"
-    group_by = "material"
+    report_title = "Dashboard"
+    report_model = Material
+    date_field = "sale__sales_date"
+    group_by = "material_code"
+    form_class = ReportForm
     columns = [
-        "name",
+        "material_code",
         ComputationField.create(
-            Sum, "quantity", verbose_name="Total quantity sold", is_summable=False
+            Sum, "sale__quantity", verbose_name="Total Sales Quantity"
         ),
         ComputationField.create(
-            Sum, "material__selling_price", name="sum__value", verbose_name="Total Value sold $"
+            Sum, "sale__price", name="sales__value", verbose_name="Total Sales Value in ETB"
         ),
     ]
 
     chart_settings = [
         Chart(
-            "Total sold $",
+            "Total sales in ETB",
             Chart.COLUMN,
-            data_source=["sum__value"],
-            title_source=["name"],
+            data_source=["sales__value"],
+            title_source=["material_code"],
         ),
         Chart(
-            "Total sold $ [PIE]",
+            "Total sales in ETB [PIE]",
             Chart.PIE,
-            data_source=["sum__value"],
-            title_source=["name"],
+            data_source=["sales__value"],
+            title_source=["material_code"],
         ),
     ]
+
+    def get(self, request, *args, **kwargs):
+        form_class = self.get_form_class()
+        self.form = self.get_form(form_class)
+
+        if self.form.is_valid() and self.form.cleaned_data.get('report'):
+            if self.form.cleaned_data['report'] == 'orders':
+                self.date_field = 'order__order_date'
+                self.columns = [
+                    "material_code",
+                    ComputationField.create(
+                        Sum, "order__quantity", name="orders__value", verbose_name="Total Order Quantity"
+                    ),
+                    ComputationField.create(
+                        Sum, "order__price", verbose_name="Total Orders Value in ETB"
+                    ),
+                ]
+
+                self.chart_settings = [
+                    Chart(
+                        "Total Work Orders in ETB",
+                        Chart.COLUMN,
+                        data_source=["orders__value"],
+                        title_source=["material_code"],
+                    ),
+                    Chart(
+                        "Total Work Orders in ETB [PIE]",
+                        Chart.PIE,
+                        data_source=["orders__value"],
+                        title_source=["material_code"],
+                    ),
+                ]
+        
+        return super().get(request, *args, **kwargs)

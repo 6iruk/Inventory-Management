@@ -3,7 +3,9 @@
 
 <h4 class="py-3 mb-4" style="color: #A94A4A;"><span>{{ header | capfirst}} Form </span>/ Add {{ header | capfirst}} </h4>
 <form action="{% url action_url %}" method="POST" enctype="multipart/form-data">
-
+    {% if form.instance %}
+        <input type="number" name="id" value="{{ form.instance.id }}" hidden/>
+    {% endif %}
     {% csrf_token %}
     {% crispy form %}
     
