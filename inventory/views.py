@@ -309,7 +309,7 @@ def report(request):
         return HttpResponseRedirect(reverse("home"))
     
     report = SaleReport.as_view()(request)
-    if request.htmx or request.headers.get('X-Requested-With') and request.headers['X-Requested-With'] == 'XMLHttpRequest':
+    if request.htmx or request.GET.get('_export') or request.headers.get('X-Requested-With') and request.headers['X-Requested-With'] == 'XMLHttpRequest':
         return report
     else:
         return render(request, 'inventory/components/report_full.html', {'report': report.render().content.decode('utf-8'), 'role': role})
