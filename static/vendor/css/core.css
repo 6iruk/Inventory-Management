@@ -93,7 +93,7 @@ body {
   line-height: var(--bs-body-line-height);
   color: var(--bs-body-color);
   text-align: var(--bs-body-text-align);
-  background-color: #F4D793;
+  background-color: #fff;
   -webkit-text-size-adjust: 100%;
   -webkit-tap-highlight-color: rgba(67, 89, 113, 0);
 }
@@ -111,7 +111,7 @@ h6, .h6, h5, .h5, h4, .h4, h3, .h3, h2, .h2, h1, .h1 {
   margin-bottom: 1rem;
   font-weight: 500;
   line-height: 1.1;
-  color: #FFF6DA;
+  color: #e9e9ed;
 }
 
 h1, .h1 {
@@ -1746,7 +1746,7 @@ progress {
   margin-bottom: 1rem;
   color: var(--bs-table-color);
   vertical-align: middle;
-  border-color: #a94a4a;
+  border-color: #00a4a6;
 }
 .table > :not(caption) > * > * {
   padding: 0.625rem 1.25rem;
@@ -1997,7 +1997,7 @@ progress {
   font-weight: 400;
   line-height: 1.53;
   color: #697a8d;
-  background-color: #FFF6DA;
+  background-color: #e9e9ed;
   background-clip: padding-box;
   border: 1px solid #d9dee3;
   appearance: none;
@@ -3682,7 +3682,7 @@ textarea.form-control-lg {
   --bs-card-cap-color: ;
   --bs-card-height: ;
   --bs-card-color: ;
-  --bs-card-bg: #f4d793;
+  --bs-card-bg: #fff;
   --bs-card-img-overlay-padding: 1.5rem;
   --bs-card-group-margin: 0.8125rem;
   position: relative;
@@ -3727,7 +3727,7 @@ textarea.form-control-lg {
 
 .card-title {
   margin-bottom: var(--bs-card-title-spacer-y);
-  color: #a94a4a; 
+  color: #00a4a6; 
 }
 
 .card-subtitle {
@@ -6674,7 +6674,7 @@ a.invert-bg-dark:hover, a.invert-bg-dark:focus {
   letter-spacing: 1px;
 }
 .table:not(.table-dark) th {
-  color: #a94a4a;
+  color: #00a4a6;
 }
 
 .table-border-bottom-0 tr:last-child td,
@@ -14856,7 +14856,7 @@ html:not(.layout-menu-fixed) .menu-inner-shadow {
 .menu-vertical .menu-inner > .menu-item {
   margin: 4px;
   padding: 1vh;
-  border: 1px solid #F4D793;
+  border: 1px solid #fff;
   width: 96%;
 }
 .menu-vertical .menu-inner > .menu-item .menu-link {
