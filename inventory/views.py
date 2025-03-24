@@ -172,6 +172,17 @@ def employee(request):
 
             form.save()
             return HttpResponseRedirect(reverse("employee"))
+    
+    if request.GET.get('id'):
+        id = int(request.GET['id'])
+        employee = Employee.objects.get(id = id)
+
+        if request.GET.get('del'):
+            employee.delete()
+
+            return HttpResponseRedirect(reverse("employee"))
+        else:
+            form = EmployeeForm(instance = employee)
 
     else:
         form = EmployeeForm()
