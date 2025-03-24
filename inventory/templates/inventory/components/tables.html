@@ -27,7 +27,7 @@
         <div class="indeterminate"></div>
     </div>
 
-<h4 class="py-3 mb-4" style="color: #A94A4A;"><span>{{ header | capfirst}} List </span></h4>
+<h4 class="py-3 mb-4" style="color: #00a4a6;"><span>{{ header | capfirst}} List </span></h4>
 
 {% render_table table %}
 
@@ -37,9 +37,9 @@
 
 <!-- Place the script at the bottom of the page before closing body tag -->
 <script>
-    function showCallPopup(phoneNumber) {
-        if (confirm("Call " + phoneNumber + "?")) {
-            window.location.href = 'tel:' + phoneNumber;
-        }
+    function deleteModal(url) {
+      var x = document.getElementById("modal-delete");
+
+      x.href = url;
     }
 </script>

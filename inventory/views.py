@@ -68,7 +68,7 @@ def material(request):
         materials = Material.objects.filter(Q(name__icontains = request.GET['query']) | Q(material_type__icontains = request.GET['query']) | Q(material_code__icontains = request.GET['query']) | Q(description__icontains = request.GET['query']))
         
         try:
-            materials = materials.union(Material.objects.filter(Q(stock_quantity = float(request.GET['query'])) | Q(buying_price = float(request.GET['query'])) | Q(unit_price = float(request.GET['query']))))
+            materials = materials.union(Material.objects.filter(Q(stock_quantity = float(request.GET['query'])) | Q(buying_price = float(request.GET['query'])) | Q(selling_price = float(request.GET['query']))))
         except ValueError:
             pass
     else:
@@ -133,11 +133,16 @@ def sale(request):
         form = SaleForm()
 
     if 'query' in request.GET:
-        sales = Sale.objects.filter(Q(material__name__icontains = request.GET['query']) | Q(material__material_type__icontains = request.GET['query']) | Q(material__material_code__icontains = request.GET['query']))
+        sales = Sale.objects.filter(Q(material__name__icontains = request.GET['query']) | Q(material__material_type__icontains = request.GET['query']) | Q(material__material_code__icontains = request.GET['query']) | Q(notes__icontains = request.GET['query']) | Q(sales_date__icontains = request.GET['query']))
 
         if request.GET['query'].isdigit():
             sales = sales.filter(Q(quantity = int(request.GET['query'])))
-    
+        
+        try:
+            sales = sales.union(Sale.objects.filter(Q(price = float(request.GET['query']))))
+        except ValueError:
+            pass
+
     else:
         sales = Sale.objects.all()
     
@@ -188,7 +193,7 @@ def employee(request):
         form = EmployeeForm()
 
     if 'query' in request.GET:
-        employees = Employee.objects.filter(Q(name__icontains = request.GET['query']) | Q(phone_number__icontains = request.GET['query']))
+        employees = Employee.objects.filter(Q(name__icontains = request.GET['query']) | Q(phone_number__icontains = request.GET['query']) | Q(notes__icontains = request.GET['query']))
     
     else:
         employees = Employee.objects.all()
@@ -248,11 +253,16 @@ def order(request):
         form = OrderForm()
 
     if 'query' in request.GET:
-        orders = Order.objects.filter(Q(material__name__icontains = request.GET['query']) | Q(material__material_type__icontains = request.GET['query']) | Q(material__material_code__icontains = request.GET['query']) | Q(employee__name__icontains = request.GET['query']) | Q(employee__phone_number__icontains = request.GET['query']))
+        orders = Order.objects.filter(Q(material__name__icontains = request.GET['query']) | Q(material__material_type__icontains = request.GET['query']) | Q(material__material_code__icontains = request.GET['query']) | Q(employee__name__icontains = request.GET['query']) | Q(employee__phone_number__icontains = request.GET['query']) | Q(notes__icontains = request.GET['query']) | Q(order_date__icontains = request.GET['query']))
 
         if request.GET['query'].isdigit():
             orders = orders.filter(Q(quantity = int(request.GET['query'])))
-    
+
+        try:
+            orders = orders.union(Order.objects.filter(Q(price = float(request.GET['query']))))
+        except ValueError:
+            pass
+
     else:
         orders = Order.objects.all()
     
