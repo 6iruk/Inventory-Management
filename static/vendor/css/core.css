@@ -6217,7 +6217,6 @@ strong {
 }
 
 a:not([href]) {
-  color: inherit;
   text-decoration: none;
 }
 a:not([href]):hover {
