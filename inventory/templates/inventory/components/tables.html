@@ -37,9 +37,11 @@
 
 <!-- Place the script at the bottom of the page before closing body tag -->
 <script>
-    function deleteModal(url) {
+    function deleteModal(url, id) {
       var x = document.getElementById("confirmDelete");
+      var y = document.getElementById("modal-item-id");
 
       x.formAction = url;
+      y.value = id;
     }
 </script>

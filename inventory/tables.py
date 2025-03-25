@@ -5,7 +5,7 @@ from inventory.models import *
     
 class MaterialTable(tables.Table):
     update = tables.TemplateColumn(
-    '<a class="btn btn-success" href="/material?id={{ record.id }}">Update</a><a class="btn btn-danger mt-2" onclick="deleteModal(\'/material?id={{ record.id }}&del=true\')"  data-bs-toggle="modal" data-bs-target="#deleteModal">Delete</a>',
+    '<a class="btn btn-success" href="/material?id={{ record.id }}">Update</a><a class="btn btn-danger mt-2" onclick="deleteModal(\'/material?\', {{ record.id }})"  data-bs-toggle="modal" data-bs-target="#deleteModal">Delete</a>',
         verbose_name='',
         orderable=False,
         attrs={
@@ -30,7 +30,7 @@ class CashierMaterialTable(tables.Table):
 
 class SaleTable(tables.Table):
     update = tables.TemplateColumn(
-    '<a class="btn btn-success" href="/sale?id={{ record.id }}">Update</a><a class="btn btn-danger mt-2" onclick="deleteModal(\'/sale?id={{ record.id }}&del=true\')"  data-bs-toggle="modal" data-bs-target="#deleteModal">Delete</a>',
+    '<a class="btn btn-success" href="/sale?id={{ record.id }}">Update</a><a class="btn btn-danger mt-2" onclick="deleteModal(\'/sale?\', {{ record.id }})"  data-bs-toggle="modal" data-bs-target="#deleteModal">Delete</a>',
         verbose_name='',
         orderable=False,
         attrs={
@@ -49,7 +49,7 @@ class CashierSaleTable(tables.Table):
 
 class EmployeeTable(tables.Table):
     update = tables.TemplateColumn(
-    '<a class="btn btn-success" href="/employee?id={{ record.id }}">Update</a><a class="btn btn-danger mt-2" onclick="deleteModal(\'/employee?id={{ record.id }}&del=true\')"  data-bs-toggle="modal" data-bs-target="#deleteModal">Delete</a>',
+    '<a class="btn btn-success" href="/employee?id={{ record.id }}">Update</a><a class="btn btn-danger mt-2" onclick="deleteModal(\'/employee?\', {{ record.id }})"  data-bs-toggle="modal" data-bs-target="#deleteModal">Delete</a>',
         verbose_name='',
         orderable=False,
         attrs={
@@ -64,7 +64,7 @@ class EmployeeTable(tables.Table):
 
 class OrderTable(tables.Table):
     update = tables.TemplateColumn(
-    '<a class="btn btn-success" href="/order?id={{ record.id }}">Update</a><a class="btn btn-danger mt-2" onclick="deleteModal(\'/order?id={{ record.id }}&del=true\')"  data-bs-toggle="modal" data-bs-target="#deleteModal">Delete</a>',
+    '<a class="btn btn-success" href="/order?id={{ record.id }}">Update</a><a class="btn btn-danger mt-2" onclick="deleteModal(\'/order?\', {{ record.id }})"  data-bs-toggle="modal" data-bs-target="#deleteModal">Delete</a>',
         verbose_name='',
         orderable=False,
         attrs={
