@@ -59,7 +59,7 @@ class EmployeeTable(tables.Table):
 
     class Meta:
         model = Employee
-        fields = ['name', 'phone_number','notes', 'is_active']
+        fields = ['id', 'name', 'phone_number','notes', 'is_active']
 
 
 class OrderTable(tables.Table):

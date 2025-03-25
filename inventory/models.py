@@ -59,7 +59,7 @@ class Employee(models.Model):
     is_active = models.BooleanField(default=True)
 
     def __str__(self):
-        return self.name + ' ' + self.phone_number
+        return self.name + '-' + str(self.id)
     
 class Order(models.Model):
     employee = models.ForeignKey(Employee, on_delete=models.CASCADE)
