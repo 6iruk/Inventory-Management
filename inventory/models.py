@@ -54,7 +54,7 @@ class Sale(models.Model):
 
 class Employee(models.Model):
     name = models.CharField(max_length=100)
-    phone_number = models.CharField(validators=[phone_regex], max_length=17, unique=True)
+    phone_number = models.PositiveIntegerField()
     notes = models.TextField(blank=True, null=True)
     is_active = models.BooleanField(default=True)
 
