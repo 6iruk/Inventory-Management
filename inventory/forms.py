@@ -128,10 +128,12 @@ class OrderForm(ModelForm):
 class AccountForm(ModelForm):
     username = forms.CharField(
         label="User Name",
+        min_length=3
     )
 
     password = forms.CharField(
         label="Password",
+        min_length=8
     )
 
     class Meta:
@@ -161,6 +163,8 @@ class ReportForm(BaseReportForm, forms.Form):
     REPORT_CHOICES = (
         ("sales", "Sales"),
         ("orders", "Orders"),
+        ("purchases", "Purchases"),
+        ("employees", "Employees"),
     )
 
     start_date = forms.DateField(
@@ -188,3 +192,11 @@ class ReportForm(BaseReportForm, forms.Form):
 
     def get_end_date(self):
         return self.cleaned_data["end_date"]
+    
+    def get_crosstab_ids(self):
+        ids = []
+
+        for i in list(Employee.objects.values('code')):
+            ids.append(i['code'])
+
+        return  ids

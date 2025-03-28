@@ -41,6 +41,12 @@ def material(request):
             form = MaterialForm(request.POST)
 
         if form.is_valid():
+            data = form.cleaned_data
+
+            same_type = Material.objects.filter(material_code = data['material_code']).count()
+
+            form.cleaned_data['material_code'] += '-' + str(same_type + 1)
+            print(data['material_code'])
 
             form.save()
             return HttpResponseRedirect(reverse("material"))
@@ -56,7 +62,7 @@ def material(request):
                 return HttpResponseRedirect(reverse("material"))
             else:
                 form = MaterialForm(instance = material)
-
+                form.fields.pop('stock_quantity')
         else:
             form = MaterialForm()
 
@@ -170,8 +176,13 @@ def employee(request):
         return HttpResponseRedirect(reverse("home"))
 
     if request.method == "POST":
-
-        form = EmployeeForm(request.POST)
+        if  request.POST.get('id'):
+            id = int(request.POST['id'])
+            employee = Employee.objects.get(id = id)
+            form = EmployeeForm(request.POST, instance = employee)
+        
+        else:
+            form = EmployeeForm(request.POST)
 
         if form.is_valid():
 
@@ -278,8 +289,9 @@ def order(request):
     else:
         return render(request, 'inventory/components/tables_full.html', {"table":table, "form": form, "header":'Order', "action_url":'order', "role":role})
 
+
 @login_required
-def user(request):
+def account(request):
     
     role = ''
     if request.user.is_superuser:
@@ -287,37 +299,66 @@ def user(request):
     
     else:
 
-        user = Account.objects.get(user=request.user)
-        role = user.role.lower()
+        return HttpResponseRedirect(reverse("home"))
 
     if request.method == "POST":
+        if  request.POST.get('id'):
+            id = int(request.POST['id'])
+            account = Account.objects.get(id = id)
+            form = AccountForm(request.POST, instance = account)
+        
+        else:
+            form = AccountForm(request.POST)
 
-        form = OrderForm(request.POST)
-
-        if form.is_valid():
+        if form.is_valid() and request.POST.get('id'):
+            data = form.cleaned_data
+            account.user.username = data['username']
+            account.user.set_password(data['password'])
+            account.save()
 
             form.save()
-            return HttpResponseRedirect(reverse("order"))
+            return HttpResponseRedirect(reverse("account"))
+        
+        if form.is_valid():
+            data = form.cleaned_data
+            user = User.objects.create_user(username=data['username'], password=data['password'])
+            
+            account = form.save(commit=False)
+            account.user = user
+            account.save()
+
+            return HttpResponseRedirect(reverse("account"))
+    
+    if request.GET.get('id'):
+        id = int(request.GET['id'])
+        account = Account.objects.get(id = id)
+
+        if request.GET.get('del'):
+            account.delete()
+
+            return HttpResponseRedirect(reverse("account"))
+        else:
+            form = AccountForm(instance = account)
 
     else:
-        form = OrderForm()
+        form = AccountForm()
 
-        if 'query' in request.GET:
-            orders = Order.objects.filter(material_code = request.GET['query'])
-        else:
-            orders = Order.objects.all()
-        
-        if role == 'admin':
-            table = OrderTable(orders)
-        elif role == 'manager':
-            table = ManagerOrderTable(orders)
-        
-        table.paginate(page=request.GET.get("page", 1), per_page=4)
+    if 'query' in request.GET:
+        accounts = Account.objects.filter(Q(name__icontains = request.GET['query']) | Q(phone_number__icontains = request.GET['query']) | Q(notes__icontains = request.GET['query']))
+    
+    else:
+        accounts = Account.objects.all()
+    
+    if role == 'admin':
+        table = AccountTable(accounts, order_by = request.GET.get('sort'))
+    
+    table.paginate(page=request.GET.get("page", 1), per_page=4)
     
     if request.htmx:
-        return render(request, 'inventory/components/tables.html', {"table":table, "form": form, "header":'Order', "action_url":'material', "role":role})
+        return render(request, 'inventory/components/tables.html', {"table":table, "form": form, "header":'Account', "action_url":'account', "role":role})
     else:
-        return render(request, 'inventory/components/tables_full.html', {"table":table, "form": form, "header":'Order', "action_url":'material', "role":role})
+        return render(request, 'inventory/components/tables_full.html', {"table":table, "form": form, "header":'Account', "action_url":'account', "role":role})
+
 
 @login_required
 def report(request):
@@ -337,31 +378,45 @@ def report(request):
 
 class SaleReport(ReportView):
     report_title = "Dashboard"
-    report_model = Material
-    date_field = "sale__sales_date"
-    group_by = "material_code"
+    report_model = Sale
+    date_field = "sales_date"
+    group_by = "material"
     form_class = ReportForm
     columns = [
         "material_code",
+        "buying_price",
+        "selling_price",
         ComputationField.create(
-            Sum, "sale__quantity", verbose_name="Total Sales Quantity"
+            Sum, "quantity", name="quantity", verbose_name="Total Quantity"
         ),
         ComputationField.create(
-            Sum, "sale__price", name="sales__value", verbose_name="Total Sales Value in ETB"
+            Sum, "price", name="etb_value", verbose_name="Total Value in ETB"
         ),
     ]
 
     chart_settings = [
         Chart(
-            "Total sales in ETB",
+            "Total quantity",
             Chart.COLUMN,
-            data_source=["sales__value"],
+            data_source=["quantity"],
             title_source=["material_code"],
         ),
         Chart(
-            "Total sales in ETB [PIE]",
+            "Total quantity [PIE]",
             Chart.PIE,
-            data_source=["sales__value"],
+            data_source=["quantity"],
+            title_source=["material_code"],
+        ),
+        Chart(
+            "Total value in ETB",
+            Chart.COLUMN,
+            data_source=["etb_value"],
+            title_source=["material_code"],
+        ),
+        Chart(
+            "Total value in ETB [PIE]",
+            Chart.PIE,
+            data_source=["etb_value"],
             title_source=["material_code"],
         ),
     ]
@@ -372,30 +427,103 @@ class SaleReport(ReportView):
 
         if self.form.is_valid() and self.form.cleaned_data.get('report'):
             if self.form.cleaned_data['report'] == 'orders':
-                self.date_field = 'order__order_date'
+                self.__class__.queryset = Order.objects
+                self.date_field = 'order_date'
+
+            elif self.form.cleaned_data['report'] == 'purchases':
+                self.__class__.queryset = Material.objects
+                self.group_by = "material_code"
+                self.date_field = 'purchase_date'
                 self.columns = [
                     "material_code",
                     ComputationField.create(
-                        Sum, "order__quantity", name="orders__value", verbose_name="Total Order Quantity"
+                        Sum, "purchase_quantity", name="quantity", verbose_name="Total Purchase Quantity"
                     ),
                     ComputationField.create(
-                        Sum, "order__price", verbose_name="Total Orders Value in ETB"
+                        Sum, "buying_price", name="etb_cost", verbose_name="Total Cost in ETB"
+                    ),
+                    ComputationField.create(
+                        Sum, "selling_price", name="etb_value", verbose_name="Total Expected Profit in ETB"
                     ),
                 ]
 
                 self.chart_settings = [
                     Chart(
-                        "Total Work Orders in ETB",
+                        "Total quantity",
                         Chart.COLUMN,
-                        data_source=["orders__value"],
+                        data_source=["quantity"],
                         title_source=["material_code"],
                     ),
                     Chart(
-                        "Total Work Orders in ETB [PIE]",
+                        "Total quantity [PIE]",
                         Chart.PIE,
-                        data_source=["orders__value"],
+                        data_source=["quantity"],
+                        title_source=["material_code"],
+                    ),
+                    Chart(
+                        "Total cost in ETB",
+                        Chart.COLUMN,
+                        data_source=["etb_cost"],
+                        title_source=["material_code"],
+                    ),
+                    Chart(
+                        "Total cost in ETB [PIE]",
+                        Chart.PIE,
+                        data_source=["etb_cost"],
+                        title_source=["material_code"],
+                    ),
+                    Chart(
+                        "Total value in ETB",
+                        Chart.COLUMN,
+                        data_source=["etb_value"],
+                        title_source=["material_code"],
+                    ),
+                    Chart(
+                        "Total value in ETB [PIE]",
+                        Chart.PIE,
+                        data_source=["etb_value"],
                         title_source=["material_code"],
                     ),
                 ]
-        
+
+            elif self.form.cleaned_data['report'] == 'employees':
+                self.__class__.queryset = Order.objects
+                self.date_field = 'order_date'
+                self.crosstab_field = "employee__code"
+                self.crosstab_columns = [
+                    ComputationField.create(
+                        Sum, "quantity", name="order_quantity", verbose_name=" "
+                    ),
+                ]
+
+                self.columns = [
+                    "material_code",
+                    "buying_price",
+                    "__crosstab__",
+                    ComputationField.create(
+                        Sum, "quantity", name="quantity", verbose_name="Total Quantity"
+                    ),
+                    ComputationField.create(
+                        Sum, "price", name="etb_value", verbose_name="Total Value in ETB"
+                    ),
+                ]
+
+                self.chart_settings = [
+                    Chart(
+                        "Total quantity",
+                        Chart.COLUMN,
+                        data_source=["order_quantity"],
+                        title_source=["material_code"],
+                    ),
+                    Chart(
+                        "Total quantity [PIE]",
+                        Chart.PIE,
+                        data_source=["order_quantity"],
+                        title_source=["material_code"],
+                    ),
+                ]
+            
+            else:
+                self.__class__.queryset = Sale.objects
+
         return super().get(request, *args, **kwargs)
