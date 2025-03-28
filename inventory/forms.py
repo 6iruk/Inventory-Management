@@ -123,7 +123,39 @@ class OrderForm(ModelForm):
             raise ValidationError(
                 f'Only {material.stock_quantity} left'
             )
-        
+
+
+class AccountForm(ModelForm):
+    username = forms.CharField(
+        label="User Name",
+    )
+
+    password = forms.CharField(
+        label="Password",
+    )
+
+    class Meta:
+        model = Account
+        fields = ['phone_number', 'role']
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.layout = Layout(
+            Row(
+                Column('username', css_class='form-group col-md-4 mb-0'),
+                Column('phone_number', css_class='form-group col-md-4 mb-0'),
+                Column('role', css_class='form-group col-md-4 mb-0'),
+                css_class='row'
+            ),
+            Row(
+                Column('password', css_class='form-group col-md-4 mb-0'),
+                css_class='row mb-4'
+            ),
+            Submit('submit', 'ADD')
+        )
+
+
 class ReportForm(BaseReportForm, forms.Form):
 
     REPORT_CHOICES = (
