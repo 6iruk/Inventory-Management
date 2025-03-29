@@ -23,7 +23,14 @@ DEPARTMENTS = [
 
 phone_regex = RegexValidator(regex=r'^\d{9,15}$', message="Phone number must be entered in the format: '+999999999'. Up to 15 digits allowed.")
 
-
+class Account(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    phone_number = models.CharField(validators=[phone_regex], max_length=17, unique=True)
+    role = models.CharField(max_length=20, choices=USER_ROLES)
+    
+    def __str__(self):
+        return self.user.username
+    
 class Material(models.Model):
     name = models.CharField(max_length=100)
     material_type = models.CharField(max_length=100)
@@ -47,6 +54,7 @@ class Material(models.Model):
 
 class Sale(models.Model):
     material = models.ForeignKey(Material, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True)
     quantity = models.PositiveIntegerField()
     price = models.DecimalField(decimal_places=2, max_digits=10, null=True)
     sales_date = models.DateField()
@@ -82,6 +90,7 @@ class Employee(models.Model):
 class Order(models.Model):
     employee = models.ForeignKey(Employee, on_delete=models.CASCADE)
     material = models.ForeignKey(Material, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True)
     price = models.DecimalField(decimal_places=2, max_digits=10, null=True)
     quantity = models.PositiveIntegerField()
     order_date = models.DateField()
@@ -98,11 +107,4 @@ class Order(models.Model):
 
         super().save(**kwargs)
 
-class Account(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    phone_number = models.CharField(validators=[phone_regex], max_length=17, unique=True)
-    role = models.CharField(max_length=20, choices=USER_ROLES)
-    
-    def __str__(self):
-        return self.user.username
     

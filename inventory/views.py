@@ -117,7 +117,9 @@ def sale(request):
 
         if form.is_valid():
 
-            form.save()
+            sale = form.save()
+            sale.user = request.user
+            sale.save()
             return HttpResponseRedirect(reverse("sale"))
 
     elif role == 'admin':
@@ -242,7 +244,9 @@ def order(request):
 
         if form.is_valid():
 
-            form.save()
+            order = form.save()
+            order.user = request.user
+            order.save()
             return HttpResponseRedirect(reverse("order"))
 
     elif role == 'admin':

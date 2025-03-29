@@ -40,7 +40,7 @@ class SaleTable(tables.Table):
 
     class Meta:
         model = Sale
-        fields = ['material', 'quantity', 'price', 'sales_date', 'notes']
+        fields = ['material', 'quantity', 'price', 'sales_date', 'user__username', 'notes']
 
 class CashierSaleTable(tables.Table):
     class Meta:
@@ -74,7 +74,7 @@ class OrderTable(tables.Table):
 
     class Meta:
         model = Order
-        fields = ['employee', 'material','quantity', 'order_date', 'notes']
+        fields = ['employee', 'material','quantity', 'order_date', 'user__username', 'notes']
 
 class ManagerOrderTable(tables.Table):
     class Meta:
