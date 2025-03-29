@@ -36,17 +36,11 @@ def material(request):
             id = int(request.POST['id'])
             material = Material.objects.get(id = id)
             form = MaterialForm(request.POST, instance = material)
-        
+            form.fields['stock_quantity'].required = False
         else:
             form = MaterialForm(request.POST)
 
         if form.is_valid():
-            data = form.cleaned_data
-
-            same_type = Material.objects.filter(material_code = data['material_code']).count()
-
-            form.cleaned_data['material_code'] += '-' + str(same_type + 1)
-            print(data['material_code'])
 
             form.save()
             return HttpResponseRedirect(reverse("material"))
@@ -62,7 +56,7 @@ def material(request):
                 return HttpResponseRedirect(reverse("material"))
             else:
                 form = MaterialForm(instance = material)
-                form.fields.pop('stock_quantity')
+                form.fields['stock_quantity'].disabled = True
         else:
             form = MaterialForm()
 
@@ -444,10 +438,10 @@ class SaleReport(ReportView):
                         Sum, "purchase_quantity", name="quantity", verbose_name="Total Purchase Quantity"
                     ),
                     ComputationField.create(
-                        Sum, "buying_price", name="etb_cost", verbose_name="Total Cost in ETB"
+                        Sum, "total_cost", name="etb_cost", verbose_name="Total Cost in ETB"
                     ),
                     ComputationField.create(
-                        Sum, "selling_price", name="etb_value", verbose_name="Total Expected Profit in ETB"
+                        Sum, "expected_sale", name="etb_value", verbose_name="Total Expected Profit in ETB"
                     ),
                 ]
 
@@ -516,12 +510,6 @@ class SaleReport(ReportView):
                     Chart(
                         "Total quantity",
                         Chart.COLUMN,
-                        data_source=["order_quantity"],
-                        title_source=["material_code"],
-                    ),
-                    Chart(
-                        "Total quantity [PIE]",
-                        Chart.PIE,
                         data_source=["order_quantity"],
                         title_source=["material_code"],
                     ),

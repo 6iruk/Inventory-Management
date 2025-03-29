@@ -41,6 +41,8 @@ class Material(models.Model):
     stock_quantity = models.PositiveIntegerField(default=0)
     buying_price = models.DecimalField(decimal_places=2, max_digits=10, null=True)
     selling_price = models.DecimalField(decimal_places=2, max_digits=10)
+    total_cost = models.DecimalField(decimal_places=2, max_digits=10, null=True)
+    expected_sale = models.DecimalField(decimal_places=2, max_digits=10, null=True)
 
     def __str__(self):
         return self.material_code + '-' + self.material_type + '-' + self.name
@@ -49,6 +51,8 @@ class Material(models.Model):
         if not self.purchase_date:
             self.purchase_date = datetime.datetime.now()
             self.purchase_quantity = self.stock_quantity 
+            self.total_cost = self.purchase_quantity * self.buying_price
+            self.expected_sale = self.purchase_quantity * self.selling_price
 
         super().save(**kwargs)   
 
@@ -82,8 +86,9 @@ class Employee(models.Model):
         return self.code
     
     def save(self, **kwargs):
-        self.code = self.name + '-' + self.id
+        super().save(**kwargs)
 
+        self.code = self.name + '-' + str(self.id)
         super().save(**kwargs)
 
     
