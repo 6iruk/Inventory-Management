@@ -74,7 +74,7 @@ class OrderTable(tables.Table):
 
     class Meta:
         model = Order
-        fields = ['employee', 'material','quantity', 'order_date', 'user__username', 'notes']
+        fields = ['employee', 'material','quantity', 'price', 'order_date', 'user__username', 'notes']
 
 class ManagerOrderTable(tables.Table):
     class Meta:

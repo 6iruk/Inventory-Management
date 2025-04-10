@@ -508,8 +508,14 @@ class SaleReport(ReportView):
 
                 self.chart_settings = [
                     Chart(
-                        "Total quantity",
+                        "Total Quantity",
                         Chart.COLUMN,
+                        data_source=["order_quantity"],
+                        title_source=["material_code"],
+                    ),
+                    Chart(
+                        "Total Quantity [BAR]",
+                        Chart.BAR,
                         data_source=["order_quantity"],
                         title_source=["material_code"],
                     ),
